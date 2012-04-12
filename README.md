@@ -20,7 +20,7 @@ Ensure the Ilan namespace can be loaded by updating your autoload.php:
 
     $loader->registerNamespaces(array(
         ...
-        'Liip'             => __DIR__.'/../vendor/bundles',
+        'Ilan'             => __DIR__.'/../vendor/bundles',
         ...
     ));
 
@@ -30,7 +30,7 @@ Then register the bundle in the `AppKernel.php` file:
     {
         $bundles = array(
             ...
-            new Liip\MonitorBundle\LiipMonitorBundle(),
+            new Ilan\Bundle\BootstrapBundle(),
             ...
         );
 
