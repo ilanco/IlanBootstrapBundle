@@ -30,7 +30,7 @@ Then register the bundle in the `AppKernel.php` file:
     {
         $bundles = array(
             ...
-            new Ilan\Bundle\IlanBootstrapBundle(),
+            new Ilan\Bundle\BootstrapBundle\IlanBootstrapBundle(),
             ...
         );
 
