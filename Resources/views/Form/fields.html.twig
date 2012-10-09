@@ -1,37 +1,48 @@
 {% extends 'form_div_layout.html.twig' %}
 
-{# Widgets #}
+{# Labels #}
 
-{% block choice_widget %}
-    {% if expanded %}
-    <div class="control-group {% if errors|length > 0 %}error{% endif %}">
-        {% if label_render %}
-        {{ form_label(form, label) }}
-        {% endif %}
-        <div class="controls">
-            {% for child in form %}
-            <label class="{{ widget_type ~ (multiple ? ' checkbox' : ' radio') }}">
-            {{ form_widget(child, {'attr': {'class': attr.widget_class|default('')}}) }}
-            {{ child.get('label')|trans }}
-            </label>
-            {% endfor %}
-            {{ block('field_message') }}
-        </div>
-    </div>
-    {% else %}
-    <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
-        {% if empty_value is not none %}
-        <option value="">{{ empty_value|trans }}</option>
-        {% endif %}
-        {% if preferred_choices|length > 0 %}
-            {% set options = preferred_choices %}
-            {{ block('widget_choice_options') }}
-            {% if choices|length > 0 %}
-                <option disabled="disabled">{{ separator }}</option>
-            {% endif %}
-        {% endif %}
-        {% set options = choices %}
-        {{ block('widget_choice_options') }}
-    </select>
+{% block form_label %}
+{% spaceless %}
+    {% set label_attr = attr|merge({'for': id}) %}
+    {% if required %}
+        {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
     {% endif %}
-{% endblock choice_widget %}
+    {% if form_type is defined and form_type == 'horizontal' %}
+        {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' control-label')|trim}) %}
+    {% endif %}
+    {% if label is empty %}
+        {% set label = name %}
+    {% endif %}
+    <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ label|trans }}</label>
+{% endspaceless %}
+{% endblock form_label %}
+
+{% block checkbox_label %}
+{% spaceless %}
+    {% set label_attr = attr|merge({'for': id}) %}
+    {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' checkbox')|trim}) %}
+    {% if attr.inline is defined and attr.inline %}
+        {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' inline')|trim}) %}
+    {% endif %}
+    {% if required %}
+        {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+    {% endif %}
+    {% if label is empty %}
+        {% set label = name %}
+    {% endif %}
+{% endspaceless %}
+    <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+        {{ form_widget(form) }} {{ label|trans }}
+    </label>
+{% endblock checkbox_label %}
+
+{# Rows #}
+
+{% block checkbox_row %}
+{% spaceless %}
+    {{ form_label(form) }}
+    {{ form_errors(form) }}
+{% endspaceless %}
+{% endblock checkbox_row %}
+
